@@ -19,20 +19,21 @@ export default function UpdateForm(props) {
           .get(`http://localhost:5000/api/movies/${id}`)
           // .get(`http://localhost:5000/api/movies/`)
           .then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             // setItem(res.data);
-            setItem({
-              ...item, title: res.data.title,
-                       director:res.data.director,
-                       metascore:res.data.metascore,
-                       stars:[...res.data.stars]
-            })
+            // setItem({
+            //   ...item, title: res.data.title,
+            //            director:res.data.director,
+            //            metascore:res.data.metascore,
+            //            stars:[...res.data.stars]
+            // })
+            setItem(res.data)
 
           })
           .catch(err=>{
             console.log(err);
           })
-      }, []);
+      }, [id]);
 
     const changeHandler = (e) => {
         e.preventDefault();
@@ -42,15 +43,16 @@ export default function UpdateForm(props) {
         e.preventDefault();
         // make a PUT request to edit the item
        
-        // axios
-        // .put(`http://localhost:5000/api/movies/${id}`)
-        // .then((res)=>{
-        //     props.setItem(res.data);
-        //     push(`/item-list/${id}`);
-        // })
-        // .catch(err=>{
-        //     console.log(err);
-        // });
+        axios
+        .put(`http://localhost:5000/api/movies/${id}`, item)
+        .then((res)=>{
+          // console.log(res)
+            props.setMovieList([...props.movieList, res.data]);
+            push(`/`);
+        })
+        .catch(err=>{
+            console.log(err);
+        });
   };
 
     return (
@@ -91,7 +93,7 @@ export default function UpdateForm(props) {
         />
     
 
-        <button className="md-button form-button">Submit</button>
+        <button>Submit</button>
       </form>
     )
 }
